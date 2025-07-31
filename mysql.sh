@@ -15,16 +15,16 @@ USERID=$(id -u)
 
 if [ $USERID -ne 0 ]
 then
-    echo "Run the script with root prevellege" | tee -a $LOG_FILE
+    echo -e "$R Run the script with root prevellege $N" | tee -a $LOG_FILE
     exit 1
 fi  
 
 VALIDATE(){
     if [ $1 -ne 0 ]
     then    
-        echo "$2 is....FAILED" | tee -a $LOG_FILE
+        echo -e "$2 is....$R FAILED $N" | tee -a $LOG_FILE
     else
-        echo "$2 is...SUCCESS"  | tee -a $LOG_FILE
+        echo -e "$2 is...$G SUCCESS $N"  | tee -a $LOG_FILE
     fi     
 }
 
@@ -43,9 +43,9 @@ mysql -h mysql.vasavi.online -u root -pExpenseApp@1 -e 'show databases;' &>> $LO
 
 if [ $? -ne 0 ]
 then    
-    echo "MySQL root password is not setup.. Setting now"  &>> $LOG_FILE
+    echo -e "MySQL root password is not setup..$G Setting now $N"  &>> $LOG_FILE
     mysql_secure_installation --set-root-pass ExpenseApp@1
     VALIDATE $? "Setting up root password" 
 else
-    echo "MySQL password is already setup...SKIPPING"  | tee -a $LOG_FILE
+    echo -e "MySQL password is already setup... $Y SKIPPING $N"  | tee -a $LOG_FILE
 fi      
