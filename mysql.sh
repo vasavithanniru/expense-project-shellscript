@@ -37,7 +37,7 @@ systemctl enable mysqld &>> $LOG_FILE
 VALIDATE $? "enabled MySQL server" 
 
 systemctl start mysqld  &>> $LOG_FILE
-VAIDATE $? "Started MySQL server"  
+VALIDATE $? "Started MySQL server"  
 
 mysql -h mysql.vasavi.online -u root -pExpenseApp@1 -e 'show database;'
 
