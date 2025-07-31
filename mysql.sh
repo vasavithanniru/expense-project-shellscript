@@ -30,16 +30,16 @@ VALIDATE(){
 
 echo "Script started executing at $(date)" | tee -a $LOG_FILE
 
-dnf install mysql-server -y
-VALIDATE $? "MySQL server installation"  | tee -a $LOG_FILE
+dnf install mysql-server -y &>> $LOG_FILE
+VALIDATE $? "MySQL server installation"  
 
-systemctl enable mysqld
-VALIDATE $? "enabled MySQL server" | tee -a $LOG_FILE
+systemctl enable mysqld &>> $LOG_FILE
+VALIDATE $? "enabled MySQL server" 
 
-systemctl start mysqld
-VAIDATE $? "Started MySQL server"  | tee -a $LOG_FILE
+systemctl start mysqld  &>> $LOG_FILE
+VAIDATE $? "Started MySQL server"  
 
-mysql -h mysql.vasavi.onlin -u root -pExpenseApp@1 -e 'show database;'
+mysql -h mysql.vasavi.online -u root -pExpenseApp@1 -e 'show database;'
 
 if [ $? -ne 0 ]
 then    
