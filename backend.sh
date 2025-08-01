@@ -4,6 +4,7 @@ LOG_FOLDER=/var/log/expense
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 TIME_STAMP=$(date +%F-%H-%M-%S)
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME-$TIME_STAMP.log"
+mkdir -p $LOG_FOLDER
 
 USERID=$(id -u)
 if [ $USERID -ne 0 ]
@@ -21,6 +22,8 @@ else
     echo "$2 is...SUCCESS"
 fi 
 }
+
+echo "Script started executing at $(date)"
 
 dnf module disable nodejs -y  &>>$LOG_FILE
 VALIDATE $? "Disabling Nodejs"
@@ -51,6 +54,11 @@ VALIDATE $? "unzipping the backend code"
 
 npm install &>>$LOG_FILE
 VALIDATE $? "Installing depensencies"
+
+cp /home/ec2-user/expense-project-shellscript/backend.service /etc/systemd/system/backend.service &>>$LOG_FILE
+
+
+
 
 
        
