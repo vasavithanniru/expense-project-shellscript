@@ -9,21 +9,21 @@ mkdir -p $LOG_FOLDER
 USERID=$(id -u)
 if [ $USERID -ne 0 ]
 then
-    echo "Run with root prevellege"
+    echo "Run with root prevellege"  | tee -a $LOG_FILE
     exit 1
 fi
 
 VALIDATE(){
 if [ $1 -ne 0 ]
 then
-    echo "$2 is...FAILED"
+    echo "$2 is...FAILED"  | tee -a $LOG_FILE
     exit 1
 else
-    echo "$2 is...SUCCESS"
+    echo "$2 is...SUCCESS" | tee -a $LOG_FILE
 fi 
 }
 
-echo "Script started executing at $(date)"
+echo "Script started executing at $(date)" | tee -a $LOG_FILE
 
 dnf module disable nodejs -y  &>>$LOG_FILE
 VALIDATE $? "Disabling Nodejs"
@@ -51,8 +51,8 @@ curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expen
 VALIDATE $? "Downloding the backend code"
 
 cd /app           &>>$LOG_FILE
-rm -rf /tmp/*     &>>$LOG_FILE
-unzip /tmp/backend.zip &>>$LOG_FILE
+rm -rf /app/*     &>>$LOG_FILE
+unzip /tmp/backend.zip  &>>$LOG_FILE
 VALIDATE $? "unzipping the backend code"
 
 npm install     &>>$LOG_FILE
