@@ -44,20 +44,38 @@ else
     echo "Expense user is already exists..SKIPPING" 
 fi 
 
-mkdir -p /app &>>$LOG_FILE
-rm -rf /tmp/backend
+mkdir -p /app     &>>$LOG_FILE
+VALIDATE $? "Creating app directory"
+
 curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOG_FILE
 VALIDATE $? "Downloding the backend code"
 
-cd /app &>>$LOG_FILE
+cd /app           &>>$LOG_FILE
+rm -rf /tmp/*     &>>$LOG_FILE
 unzip /tmp/backend.zip &>>$LOG_FILE
 VALIDATE $? "unzipping the backend code"
 
-npm install &>>$LOG_FILE
+npm install     &>>$LOG_FILE
 VALIDATE $? "Installing depensencies"
 
 cp /home/ec2-user/expense-project-shellscript/backend.service /etc/systemd/system/backend.service &>>$LOG_FILE
+VALIDATE $? "Copying backend.service"
 
+#Load schema before running backend
+dnf install mysql -y  &>>$LOG_FILE
+VALIDATE $? "Installing MySQL"
+
+mysql -h mysql.vasavi.online -uroot -pExpenseApp@1 < /app/schema/backend.sql  &>>$LOG_FILE
+VALIDATE $? "Loading Schema"
+
+systemctl daemon reload  &>>$LOG_FILE
+VALIDATE $? "Daemon reload"  
+
+systemctl enable backend
+VALIDATE $? "Enabling backend"
+
+systemctl restart backend   &>>$LOG_FILE
+VALIDATE $? "Restarting backend" 
 
 
 
