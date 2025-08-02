@@ -24,13 +24,15 @@ else
 fi  
 }
 
+echo "Script started executing at $(date)"
+
 dnf install nginx -y  &>>$LOG_FILE
 VALIDATE $? "Nginx installation"
 
-systemctl enable nginx -y   &>>$LOG_FILE
+systemctl enable nginx    &>>$LOG_FILE
 VALIDATE $? "Enabling nginx"     
 
-systemctl start nginx -y   &>>$LOG_FILE
+systemctl start nginx    &>>$LOG_FILE
 VALIDATE $? "Starting nginx"
 
 rm -rf /usr/share/nginx/html/*  &>>$LOG_FILE
