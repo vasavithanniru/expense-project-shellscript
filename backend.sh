@@ -68,7 +68,7 @@ VALIDATE $? "Installing MySQL"
 mysql -h mysql.vasavi.online -uroot -pExpenseApp@1 < /app/schema/backend.sql  &>>$LOG_FILE
 VALIDATE $? "Loading Schema"
 
-systemctl daemon reload  &>>$LOG_FILE
+systemctl daemon-reload  &>>$LOG_FILE
 VALIDATE $? "Daemon reload"  
 
 systemctl enable backend
